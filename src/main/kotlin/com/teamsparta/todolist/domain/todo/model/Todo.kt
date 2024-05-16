@@ -1,6 +1,8 @@
 package com.teamsparta.todolist.domain.todo.model
 
+import com.teamsparta.todolist.domain.todo.dto.TodoResponse
 import jakarta.persistence.*
+import java.util.Date
 
 @Entity
 @Table(name = "todo")
@@ -11,18 +13,23 @@ class Todo(
     @Column(name = "description")
     var description: String? = null,
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    val status: TodoStatus,
-
-
     @Column(name = "date")
-    val date: String,
+    val date: Date,
 
     @Column(name = "name")
-    val name: String
+    var name: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+}
+
+fun Todo.toResponse(): TodoResponse {
+    return TodoResponse(
+        id = id!!,
+        title = title,
+        description = description,
+        date = date,
+        name = name
+    )
 }
