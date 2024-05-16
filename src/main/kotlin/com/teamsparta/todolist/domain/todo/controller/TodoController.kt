@@ -27,12 +27,15 @@ class TodoController(private val todoListApplication: TodoListApplication) {
     }
 
     @PutMapping("/{todoId}")
-    fun updateTodo(@PathVariable todoId: Long, @RequestBody updateTodoRequest: UpdateTodoRequest): ResponseEntity<TodoResponse> {
+    fun updateTodo(
+        @PathVariable todoId: Long,
+        @RequestBody updateTodoRequest: UpdateTodoRequest
+    ): ResponseEntity<TodoResponse> {
         TODO()
     }
 
     @DeleteMapping("/{todoId}")
-    fun deleteTodo(@PathVariable todoId: Long): ResponseEntity<TodoResponse> {
+    fun deleteTodo(@PathVariable todoId: Long) {
         TODO()
     }
 }
