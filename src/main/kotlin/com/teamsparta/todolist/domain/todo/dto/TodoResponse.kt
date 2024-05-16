@@ -1,5 +1,6 @@
 package com.teamsparta.todolist.domain.todo.dto
 
+import java.time.LocalDateTime
 import java.util.Date
 
 data class TodoResponse(
@@ -7,6 +8,6 @@ data class TodoResponse(
     val title: String,
     val description: String?,
     val status: String,
-    val date: Date,
+    val date: String,
     val name: String
 )
