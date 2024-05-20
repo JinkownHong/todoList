@@ -2,7 +2,8 @@ package com.teamsparta.todolist.domain.todo.model
 
 import com.teamsparta.todolist.domain.todo.dto.TodoResponse
 import jakarta.persistence.*
-import java.util.Date
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Entity
 @Table(name = "todo")
@@ -14,7 +15,7 @@ class Todo(
     var description: String? = null,
 
     @Column(name = "date")
-    val date: Date,
+    val date: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "name")
     var name: String
@@ -29,7 +30,7 @@ fun Todo.toResponse(): TodoResponse {
         id = id!!,
         title = title,
         description = description,
-        date = date,
+        date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         name = name
     )
 }

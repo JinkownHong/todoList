@@ -29,6 +29,9 @@ class TodoController(
 
     @PostMapping
     fun createTodo(@RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
+        if(createTodoRequest.title == "") throw RequestBodyEmptyException("title")
+        if(createTodoRequest.name == "") throw RequestBodyEmptyException("name")
+
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.createTodo(createTodoRequest))
     }
 
@@ -36,6 +39,9 @@ class TodoController(
     fun updateTodo(
         @PathVariable todoId: Long, @RequestBody updateTodoRequest: UpdateTodoRequest
     ): ResponseEntity<TodoResponse> {
+        if(updateTodoRequest.title == "") throw RequestBodyEmptyException("title")
+        if(updateTodoRequest.name == "") throw RequestBodyEmptyException("name")
+
         return ResponseEntity.status(HttpStatus.OK).body(todoService.updateTodo(todoId, updateTodoRequest))
     }
 
