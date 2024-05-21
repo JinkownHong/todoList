@@ -5,12 +5,11 @@ import com.teamsparta.todolist.domain.todo.dto.TodoResponse
 import com.teamsparta.todolist.domain.todo.dto.UpdateTodoRequest
 import com.teamsparta.todolist.domain.todo.exception.ModelNotFoundException
 import com.teamsparta.todolist.domain.todo.model.Todo
-import com.teamsparta.todolist.domain.todo.repository.TodoRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import com.teamsparta.todolist.domain.todo.model.toResponse
-import org.springframework.data.domain.Sort
+import com.teamsparta.todolist.domain.todo.repository.TodoRepository
 
 @Service
 class TodoServiceImpl(
@@ -18,7 +17,6 @@ class TodoServiceImpl(
 ) : TodoService {
     override fun getAllTodoList(): List<TodoResponse> {
         return todoRepository.findAllByOrderByDateDesc().map { it.toResponse() }
-        //Sort.by(Sort.Direction.DESC,"date")
     }
 
     override fun getTodoById(todoId: Long): TodoResponse {
@@ -32,7 +30,7 @@ class TodoServiceImpl(
         val todo = Todo(
             title = request.title,
             description = request.description,
-            name = request.name
+            name = request.name,
         )
         return todoRepository.save(todo).toResponse()
     }
@@ -45,6 +43,12 @@ class TodoServiceImpl(
         todo.description = request.description
         todo.name = request.name
 
+        return todoRepository.save(todo).toResponse()
+    }
+
+    override fun changeTodoStatus(todoId: Long): TodoResponse {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        todo.status = !todo.status
         return todoRepository.save(todo).toResponse()
     }
 

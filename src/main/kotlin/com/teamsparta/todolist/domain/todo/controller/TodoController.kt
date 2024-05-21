@@ -1,9 +1,6 @@
 package com.teamsparta.todolist.domain.todo.controller
 
-import com.teamsparta.todolist.domain.todo.dto.CreateTodoRequest
-import com.teamsparta.todolist.domain.todo.dto.ErrorResponse
-import com.teamsparta.todolist.domain.todo.dto.TodoResponse
-import com.teamsparta.todolist.domain.todo.dto.UpdateTodoRequest
+import com.teamsparta.todolist.domain.todo.dto.*
 import com.teamsparta.todolist.domain.todo.exception.ModelNotFoundException
 import com.teamsparta.todolist.domain.todo.exception.RequestBodyEmptyException
 import com.teamsparta.todolist.domain.todo.service.TodoService
@@ -29,8 +26,8 @@ class TodoController(
 
     @PostMapping
     fun createTodo(@RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
-        if(createTodoRequest.title == "") throw RequestBodyEmptyException("title")
-        if(createTodoRequest.name == "") throw RequestBodyEmptyException("name")
+        if (createTodoRequest.title == "") throw RequestBodyEmptyException("title")
+        if (createTodoRequest.name == "") throw RequestBodyEmptyException("name")
 
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.createTodo(createTodoRequest))
     }
@@ -39,10 +36,17 @@ class TodoController(
     fun updateTodo(
         @PathVariable todoId: Long, @RequestBody updateTodoRequest: UpdateTodoRequest
     ): ResponseEntity<TodoResponse> {
-        if(updateTodoRequest.title == "") throw RequestBodyEmptyException("title")
-        if(updateTodoRequest.name == "") throw RequestBodyEmptyException("name")
+        if (updateTodoRequest.title == "") throw RequestBodyEmptyException("title")
+        if (updateTodoRequest.name == "") throw RequestBodyEmptyException("name")
 
         return ResponseEntity.status(HttpStatus.OK).body(todoService.updateTodo(todoId, updateTodoRequest))
+    }
+
+    @PatchMapping("/{todoId}")
+    fun changeTodoStatus(
+        @PathVariable todoId: Long
+    ): ResponseEntity<TodoResponse> {
+        return ResponseEntity.status(HttpStatus.OK).body(todoService.changeTodoStatus(todoId))
     }
 
     @DeleteMapping("/{todoId}")

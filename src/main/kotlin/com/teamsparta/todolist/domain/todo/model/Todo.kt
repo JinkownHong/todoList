@@ -18,7 +18,10 @@ class Todo(
     val date: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "name")
-    var name: String
+    var name: String,
+
+    @Column(name = "status")
+    var status: Boolean = false
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +34,7 @@ fun Todo.toResponse(): TodoResponse {
         title = title,
         description = description,
         date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-        name = name
+        name = name,
+        status = status,
     )
 }
