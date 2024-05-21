@@ -1,19 +1,20 @@
 package com.teamsparta.todolist.domain.todo.service
 
-import com.teamsparta.todolist.domain.todo.dto.CreateTodoRequest
-import com.teamsparta.todolist.domain.todo.dto.TodoResponse
-import com.teamsparta.todolist.domain.todo.dto.UpdateTodoRequest
+import com.teamsparta.todolist.domain.todo.dto.*
 import com.teamsparta.todolist.domain.todo.exception.ModelNotFoundException
+import com.teamsparta.todolist.domain.todo.model.Comment
 import com.teamsparta.todolist.domain.todo.model.Todo
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import com.teamsparta.todolist.domain.todo.model.toResponse
+import com.teamsparta.todolist.domain.todo.repository.CommentRepository
 import com.teamsparta.todolist.domain.todo.repository.TodoRepository
 
 @Service
 class TodoServiceImpl(
-    private val todoRepository: TodoRepository
+    private val todoRepository: TodoRepository,
+    private val commentRepository: CommentRepository
 ) : TodoService {
     override fun getAllTodoList(): List<TodoResponse> {
         return todoRepository.findAllByOrderByDateDesc().map { it.toResponse() }
@@ -24,7 +25,6 @@ class TodoServiceImpl(
         return todo.toResponse()
     }
 
-    @Transactional
     override fun createTodo(request: CreateTodoRequest): TodoResponse {
 
         val todo = Todo(
@@ -56,5 +56,20 @@ class TodoServiceImpl(
     override fun deleteTodo(todoId: Long) {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo",todoId)
         todoRepository.delete(todo)
+    }
+
+    @Transactional
+    override fun createComment(todoId: Long, request: CreateCommentRequest): CommentResponse {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo",todoId)
+
+        val comment = Comment (
+        commentWriter = request.commentWriter,
+        password = request.password,
+        comment = request.comment,
+        todo = todo
+            ).let { commentRepository.save(it) }
+        todo.addComment(comment)
+        commentRepository.save(comment)
+        return comment.toResponse()
     }
 }

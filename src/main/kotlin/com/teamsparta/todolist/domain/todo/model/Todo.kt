@@ -21,11 +21,18 @@ class Todo(
     var name: String,
 
     @Column(name = "status")
-    var status: Boolean = false
-) {
+    var status: Boolean = false,
+
+    @OneToMany(mappedBy = "todo", cascade = [(CascadeType.ALL)], orphanRemoval = true, fetch = FetchType.LAZY)
+    var comments: MutableList<Comment> = mutableListOf(),
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    fun addComment(comment: Comment) {
+        comments.add(comment)
+    }
 }
 
 fun Todo.toResponse(): TodoResponse {

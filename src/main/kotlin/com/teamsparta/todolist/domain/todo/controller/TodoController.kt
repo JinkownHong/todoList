@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/api/v1/todos/")
+@RequestMapping("/api/v1/todos")
 @RestController
 class TodoController(
     private val todoService: TodoService
@@ -53,6 +53,12 @@ class TodoController(
     fun deleteTodo(@PathVariable todoId: Long): ResponseEntity<Unit> {
         todoService.deleteTodo(todoId)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+    }
+
+    @PostMapping("/{todoId}/comments")
+    fun createComment(@PathVariable todoId: Long, @RequestBody createCommentRequest: CreateCommentRequest
+    ): ResponseEntity<CommentResponse> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.createComment(todoId, createCommentRequest))
     }
 
     @ExceptionHandler(ModelNotFoundException::class)
