@@ -17,4 +17,8 @@ interface TodoService {
     fun deleteTodo(todoId: Long)
 
     fun createComment(todoId: Long, request: CreateCommentRequest): CommentResponse
+
+    fun updateComment(todoId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse
+
+    fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest)
 }

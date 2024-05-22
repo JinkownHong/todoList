@@ -1,6 +1,7 @@
 package com.teamsparta.todolist.domain.todo.controller
 
 import com.teamsparta.todolist.domain.todo.dto.*
+import com.teamsparta.todolist.domain.todo.exception.DisagreementException
 import com.teamsparta.todolist.domain.todo.exception.ModelNotFoundException
 import com.teamsparta.todolist.domain.todo.exception.RequestBodyEmptyException
 import com.teamsparta.todolist.domain.todo.service.TodoService
@@ -55,23 +56,48 @@ class TodoController(
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
-    @PostMapping("/{todoId}/comments")
-    fun createComment(@PathVariable todoId: Long, @RequestBody createCommentRequest: CreateCommentRequest
+    @PostMapping("/{todoId}")
+    fun createComment(
+        @PathVariable todoId: Long, @RequestBody createCommentRequest: CreateCommentRequest
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(todoService.createComment(todoId, createCommentRequest))
     }
 
+    @PutMapping("/{todoId}/{commentId}")
+    fun updateComment(
+        @PathVariable todoId: Long,
+        @PathVariable commentId: Long,
+        @RequestBody updateCommentRequest: UpdateCommentRequest
+    ): ResponseEntity<CommentResponse> {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                todoService.updateComment(
+                    todoId, commentId, updateCommentRequest
+                )
+            )
+    }
+
+    @DeleteMapping("/{todoId}/{commentId}")
+    fun deleteComment(
+        @PathVariable todoId: Long,
+        @PathVariable commentId: Long,
+        @RequestBody deleteCommentRequest: DeleteCommentRequest
+    ): ResponseEntity<Unit> {
+        todoService.deleteComment(todoId, commentId, deleteCommentRequest)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+    }
+
     @ExceptionHandler(ModelNotFoundException::class)
     fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity
-            .status(HttpStatus.NOT_FOUND)
-            .body(ErrorResponse(message = e.message))
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse(message = e.message))
     }
 
     @ExceptionHandler(RequestBodyEmptyException::class)
     fun handleRequestBodyException(e: RequestBodyEmptyException): ResponseEntity<ErrorResponse> {
-        return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
-            .body(ErrorResponse(message = e.message))
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(message = e.message))
+    }
+
+    @ExceptionHandler(DisagreementException::class)
+    fun handleRequestBodyException(e: DisagreementException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse(message = e.message))
     }
 }
