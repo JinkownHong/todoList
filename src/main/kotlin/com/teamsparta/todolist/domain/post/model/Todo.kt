@@ -12,7 +12,7 @@ class Todo(
     var title: String,
 
     @Column(name = "description")
-    var description: String? = null,
+    var description: String,
 
     @Column(name = "date")
     val date: LocalDateTime = LocalDateTime.now(),
