@@ -80,9 +80,9 @@ class PostServiceImpl(
     override fun updateComment(todoId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        if (!comment.isValidWriter(request.commentWriter)) throw DisagreementException("commentWriter")
+        if (!comment.isValidPassword(request.password)) throw DisagreementException("password")
         comment.comment = request.comment
-        if (comment.commentWriter != request.commentWriter) throw DisagreementException("commentWriter")
-        if (comment.password != request.password) throw DisagreementException("password")
 
         return commentRepository.save(comment).toResponse()
     }
@@ -92,8 +92,8 @@ class PostServiceImpl(
         if (!todoRepository.existsById(todoId)) throw ModelNotFoundException("Todo", todoId)
         val comment =
             commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
-        if (comment.commentWriter != request.commentWriter) throw DisagreementException("commentWriter")
-        if (comment.password != request.password) throw DisagreementException("password")
+        if (!comment.isValidWriter(request.commentWriter)) throw DisagreementException("commentWriter")
+        if (!comment.isValidPassword(request.password)) throw DisagreementException("password")
 
         commentRepository.delete(comment)
     }

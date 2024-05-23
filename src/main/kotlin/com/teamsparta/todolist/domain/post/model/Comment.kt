@@ -1,6 +1,7 @@
 package com.teamsparta.todolist.domain.post.model
 
 import com.teamsparta.todolist.domain.post.dto.comment.CommentResponse
+import com.teamsparta.todolist.domain.post.repository.TodoRepository
 import jakarta.persistence.*
 
 @Entity
@@ -23,6 +24,17 @@ class Comment (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
+    fun isValidWriter(
+        writer: String
+    ):Boolean  {
+     return writer == commentWriter
+    }
+
+    fun isValidPassword(
+        pw: String
+    ):Boolean  {
+        return pw == password
+    }
 }
 
 fun Comment.toResponse(): CommentResponse {

@@ -1,13 +1,11 @@
 package com.teamsparta.todolist.domain.post.controller
 
-import com.teamsparta.todolist.domain.post.dto.*
 import com.teamsparta.todolist.domain.post.dto.todo.CreateTodoRequest
 import com.teamsparta.todolist.domain.post.dto.todo.TodoResponse
 import com.teamsparta.todolist.domain.post.dto.todo.UpdateTodoRequest
-import com.teamsparta.todolist.domain.post.exception.DisagreementException
-import com.teamsparta.todolist.domain.post.exception.ModelNotFoundException
 import com.teamsparta.todolist.domain.post.exception.RequestBodyEmptyException
 import com.teamsparta.todolist.domain.post.service.PostService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -29,7 +27,7 @@ class TodoController(
     }
 
     @PostMapping
-    fun createTodo(@RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
+    fun createTodo(@Valid @RequestBody createTodoRequest: CreateTodoRequest): ResponseEntity<TodoResponse> {
         if (createTodoRequest.title == "") throw RequestBodyEmptyException("title")
         if (createTodoRequest.name == "") throw RequestBodyEmptyException("name")
 
@@ -38,7 +36,7 @@ class TodoController(
 
     @PutMapping("/{todoId}")
     fun updateTodo(
-        @PathVariable todoId: Long, @RequestBody updateTodoRequest: UpdateTodoRequest
+        @PathVariable todoId: Long, @Valid @RequestBody updateTodoRequest: UpdateTodoRequest
     ): ResponseEntity<TodoResponse> {
         if (updateTodoRequest.title == "") throw RequestBodyEmptyException("title")
         if (updateTodoRequest.name == "") throw RequestBodyEmptyException("name")
