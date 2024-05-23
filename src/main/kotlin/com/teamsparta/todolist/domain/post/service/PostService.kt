@@ -1,8 +1,14 @@
-package com.teamsparta.todolist.domain.todo.service
+package com.teamsparta.todolist.domain.post.service
 
-import com.teamsparta.todolist.domain.todo.dto.*
+import com.teamsparta.todolist.domain.post.dto.comment.CommentResponse
+import com.teamsparta.todolist.domain.post.dto.comment.CreateCommentRequest
+import com.teamsparta.todolist.domain.post.dto.comment.DeleteCommentRequest
+import com.teamsparta.todolist.domain.post.dto.comment.UpdateCommentRequest
+import com.teamsparta.todolist.domain.post.dto.todo.CreateTodoRequest
+import com.teamsparta.todolist.domain.post.dto.todo.TodoResponse
+import com.teamsparta.todolist.domain.post.dto.todo.UpdateTodoRequest
 
-interface TodoService {
+interface PostService {
 
     fun getAllTodoList(): List<TodoResponse>
 

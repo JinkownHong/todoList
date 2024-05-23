@@ -1,6 +1,6 @@
-package com.teamsparta.todolist.domain.todo.model
+package com.teamsparta.todolist.domain.post.model
 
-import com.teamsparta.todolist.domain.todo.dto.CommentResponse
+import com.teamsparta.todolist.domain.post.dto.comment.CommentResponse
 import jakarta.persistence.*
 
 @Entity
@@ -28,7 +28,6 @@ class Comment (
 fun Comment.toResponse(): CommentResponse {
     return CommentResponse(
         id = id!!,
-        todo = todo.toResponse(),
         commentWriter = commentWriter,
         comment = comment
     )

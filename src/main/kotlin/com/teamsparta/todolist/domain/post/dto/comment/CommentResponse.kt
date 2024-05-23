@@ -1,8 +1,7 @@
-package com.teamsparta.todolist.domain.todo.dto
+package com.teamsparta.todolist.domain.post.dto.comment
 
 data class CommentResponse(
     val id: Long,
-    val todo: TodoResponse,
     val commentWriter: String,
     val comment: String,
 )

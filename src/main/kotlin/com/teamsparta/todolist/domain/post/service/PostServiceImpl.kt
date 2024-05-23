@@ -1,22 +1,28 @@
-package com.teamsparta.todolist.domain.todo.service
+package com.teamsparta.todolist.domain.post.service
 
-import com.teamsparta.todolist.domain.todo.dto.*
-import com.teamsparta.todolist.domain.todo.exception.DisagreementException
-import com.teamsparta.todolist.domain.todo.exception.ModelNotFoundException
-import com.teamsparta.todolist.domain.todo.model.Comment
-import com.teamsparta.todolist.domain.todo.model.Todo
+import com.teamsparta.todolist.domain.post.dto.comment.CommentResponse
+import com.teamsparta.todolist.domain.post.dto.comment.CreateCommentRequest
+import com.teamsparta.todolist.domain.post.dto.comment.DeleteCommentRequest
+import com.teamsparta.todolist.domain.post.dto.comment.UpdateCommentRequest
+import com.teamsparta.todolist.domain.post.dto.todo.CreateTodoRequest
+import com.teamsparta.todolist.domain.post.dto.todo.TodoResponse
+import com.teamsparta.todolist.domain.post.dto.todo.UpdateTodoRequest
+import com.teamsparta.todolist.domain.post.exception.DisagreementException
+import com.teamsparta.todolist.domain.post.exception.ModelNotFoundException
+import com.teamsparta.todolist.domain.post.model.Comment
+import com.teamsparta.todolist.domain.post.model.Todo
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import com.teamsparta.todolist.domain.todo.model.toResponse
-import com.teamsparta.todolist.domain.todo.repository.CommentRepository
-import com.teamsparta.todolist.domain.todo.repository.TodoRepository
+import com.teamsparta.todolist.domain.post.model.toResponse
+import com.teamsparta.todolist.domain.post.repository.CommentRepository
+import com.teamsparta.todolist.domain.post.repository.TodoRepository
 
 @Service
-class TodoServiceImpl(
+class PostServiceImpl(
     private val todoRepository: TodoRepository,
     private val commentRepository: CommentRepository
-) : TodoService {
+) : PostService {
     override fun getAllTodoList(): List<TodoResponse> {
         return todoRepository.findAllByOrderByDateDesc().map { it.toResponse() }
     }
@@ -63,17 +69,13 @@ class TodoServiceImpl(
     override fun createComment(todoId: Long, request: CreateCommentRequest): CommentResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
-        val comment = Comment(
+        return Comment(
             commentWriter = request.commentWriter,
             password = request.password,
             comment = request.comment,
             todo = todo
-        ).let { commentRepository.save(it) }
-        todo.addComment(comment)
-        todoRepository.save(todo)
-        return comment.toResponse()
+        ).let { commentRepository.save(it) }.toResponse()
     }
-
     @Transactional
     override fun updateComment(todoId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse {
         val comment =

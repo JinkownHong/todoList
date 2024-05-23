@@ -1,4 +1,4 @@
-package com.teamsparta.todolist.domain.todo.dto
+package com.teamsparta.todolist.domain.post.dto.todo
 
 data class UpdateTodoRequest(
     val title: String,

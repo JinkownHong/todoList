@@ -1,6 +1,6 @@
-package com.teamsparta.todolist.domain.todo.model
+package com.teamsparta.todolist.domain.post.model
 
-import com.teamsparta.todolist.domain.todo.dto.TodoResponse
+import com.teamsparta.todolist.domain.post.dto.todo.TodoResponse
 import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,7 +24,7 @@ class Todo(
     var status: Boolean = false,
 
     @OneToMany(mappedBy = "todo", cascade = [(CascadeType.ALL)], orphanRemoval = true, fetch = FetchType.LAZY)
-    var comments: MutableList<Comment> = mutableListOf(),
+    val comments: MutableList<Comment> = mutableListOf(),
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +43,6 @@ fun Todo.toResponse(): TodoResponse {
         date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         name = name,
         status = status,
+        comments = comments.map { it.toResponse() }
     )
 }
