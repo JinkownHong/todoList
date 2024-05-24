@@ -1,6 +1,7 @@
 # 🚀 ToDo 앱 백엔드 서버
 
 이번 프로젝트의 미션은 “투두앱 백엔드 서버 만들기”입니다. 과제는 필수 구현(STEP 1) 단계부터 선택 구현 기능(STEP 4)까지 총 4단계로 구분되어 있습니다.
+<img src="https://techcourse-storage.s3.ap-northeast-2.amazonaws.com/2020-03-16T10:41:53.786image.png" width="400">
 
 # 📋 프로젝트 개요
 
@@ -78,7 +79,7 @@
     * 인증, 인가에 대해 알아보기
     * Basic Authentication과 Bearer Authentication 알아보기
 
-## ✨ 각 STEP 별 해설
+# ✨ 각 STEP 별 해설
 
 ### STEP 1
 
@@ -133,7 +134,7 @@
 - Todo, Comment 연관성이 높아 하나의 Service 활용, Service 명을 PostService로 변경
 - GlobalExceptionHandler Class 생성
 
-## 🔨 빌드 환경
+# 🔨 빌드 환경
 
 * **Language:** Kotlin
 * **IDE:** Intellij
